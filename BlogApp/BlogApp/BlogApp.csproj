@@ -177,15 +177,12 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="DataBase\BlogContext.cs" />
+    <Compile Include="DataBase\BlogDbInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Identity\AppUserManager.cs" />
     <Compile Include="Identity\RegisterModel.cs" />
-    <Compile Include="Migrations\201712291538497_initial.cs" />
-    <Compile Include="Migrations\201712291538497_initial.Designer.cs">
-      <DependentUpon>201712291538497_initial.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Post.cs" />
@@ -196,11 +193,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Blog\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201712291538497_initial.resx">
-      <DependentUpon>201712291538497_initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

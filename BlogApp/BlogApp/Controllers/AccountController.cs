@@ -13,7 +13,7 @@ namespace BlogApp.Controllers
 {
     public class AccountController : Controller
     {
-        private AppUserManager UserManager
+        public AppUserManager UserManager
         {
             get
             {
@@ -29,9 +29,9 @@ namespace BlogApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Login = model.Login , UserName = model.Login};
+                User user = new User { Login = model.Login , UserName = model.Login };
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                await UserManager.AddToRoleAsync(user.Id, "User");
+                await UserManager.AddToRoleAsync(user.Id, "user");
                 
                 if (result.Succeeded)
                 {
