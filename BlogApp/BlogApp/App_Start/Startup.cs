@@ -22,7 +22,8 @@ namespace BlogApp.App_Start
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Register")
+                LoginPath = new PathString("/Account/Login"),
+                ReturnUrlParameter = "returnUrl"
             });
         }
     }
