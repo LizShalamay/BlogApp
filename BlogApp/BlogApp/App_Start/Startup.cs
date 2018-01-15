@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.Owin;
 using Owin;
-using BlogApp.Core.Objects;
+using BlogApp.Models;
 using BlogApp.Core.Identity;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;

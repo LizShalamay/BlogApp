@@ -1,6 +1,6 @@
 ﻿using BlogApp.Core.DataBase;
 using BlogApp.Core.Identity;
-using BlogApp.Core.Objects;
+using BlogApp.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;

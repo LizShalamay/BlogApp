@@ -1,0 +1,38 @@
+﻿@model BlogApp.Models.Post
+
+<div>
+    @using (Html.BeginForm("CreatePost", "Blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    //{@using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            @Html.LabelFor(model => model.Title)
+            <p>@Html.EditorFor(model => model.Title)</p>
+        </div>
+
+        <div>
+            @Html.LabelFor(model => model.Text)
+            <p>@Html.TextAreaFor(model => model.Text)</p>
+        </div>
+
+
+        @*@Html.AntiForgeryToken()*@
+        @Html.ValidationSummary(true)
+        <div class="editor-label">Add image</div>
+        <div class="editor-field">
+            <input type="file" name="uploadImage" />
+        </div>
+        <p><input type="submit" value="Добавить" /></p>
+    }
+    
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@*public int Id { get; set; }
+    public int AuthorId { get; set; }
+    public DateTime Date { get; set; }
+    public byte[] Image { get; set; }
+    public string Text { get; set; }*@

@@ -1,5 +1,5 @@
 ﻿using BlogApp.Core.Identity;
-using BlogApp.Core.Objects;
+using BlogApp.Models;
 using BlogApp.Identity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;

@@ -161,6 +161,8 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Blog\CreatePost.cshtml" />
+    <Content Include="Views\Blog\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -188,6 +190,10 @@
     <Compile Include="Identity\AppUserManager.cs" />
     <Compile Include="Identity\LoginModel.cs" />
     <Compile Include="Identity\RegisterModel.cs" />
+    <Compile Include="Migrations\201801151535275_initial.cs" />
+    <Compile Include="Migrations\201801151535275_initial.Designer.cs">
+      <DependentUpon>201801151535275_initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Post.cs" />
@@ -197,7 +203,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Blog\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201801151535275_initial.resx">
+      <DependentUpon>201801151535275_initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

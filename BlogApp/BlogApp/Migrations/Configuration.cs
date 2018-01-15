@@ -1,7 +1,7 @@
 namespace BlogApp.Core.Migrations
 {
     using BlogApp.Core.Identity;
-    using BlogApp.Core.Objects;
+    using BlogApp.Models;
     using Microsoft.AspNet.Identity.Owin;
     using Microsoft.AspNet.Identity;
     using System;
