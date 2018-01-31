@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApp.Core.Objects
+namespace BlogApp.Models 
 {
     class Comment
     {

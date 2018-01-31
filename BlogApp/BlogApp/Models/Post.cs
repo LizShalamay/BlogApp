@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlogApp.Core.Objects
+namespace BlogApp.Models
 {
-    class Post
+    public class Post
     {
         public int Id { get; set; }
         public int AuthorId { get; set; }
         public DateTime Date { get; set; }
         public byte[] Image { get; set; }
+        public string Title { get; set; }
         public string Text { get; set; }
     }
 }
