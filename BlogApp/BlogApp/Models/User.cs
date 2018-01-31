@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace BlogApp.Models
+namespace BlogApp.Core.Objects
 {
     public class User : IdentityUser
     {
