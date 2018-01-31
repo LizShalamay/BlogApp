@@ -1,38 +1,37 @@
-﻿@model BlogApp.Models.Post
+﻿@model BlogApp.Data.Entities.Post
+@{
+    ViewBag.Title = "CreatePost";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <div>
     @using (Html.BeginForm("CreatePost", "Blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
     //{@using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        <div>
-            @Html.LabelFor(model => model.Title)
-            <p>@Html.EditorFor(model => model.Title)</p>
+        <div class="panel panel-default">
+            <div class="panel-heading">@Html.LabelFor(model => model.Title)</div>
+            <div class="panel-body">@Html.EditorFor(model => model.Title)</div>
         </div>
 
-        <div>
-            @Html.LabelFor(model => model.Text)
-            <p>@Html.TextAreaFor(model => model.Text)</p>
+        <div class="panel panel-default">
+            <div class="panel-heading">@Html.LabelFor(model => model.Text)</div>
+            <div class="panel-body">@Html.TextAreaFor(model => model.Text, new { cols = "150", rows = "10", style = "max-width: 100%" })</div>
         </div>
 
 
-        @*@Html.AntiForgeryToken()*@
         @Html.ValidationSummary(true)
-        <div class="editor-label">Add image</div>
-        <div class="editor-field">
-            <input type="file" name="uploadImage" />
+        <div class="input-group">
+            <span class="input-group-addon">Add image</span>
+            <div class="editor-field form-control">
+                <input type="file" name="uploadImage" />
+            </div>
         </div>
-        <p><input type="submit" value="Добавить" /></p>
+        <br />
+        <input type = "submit" class ="btn btn-default" value = "Добавить" />
     }
-    
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-
-@*public int Id { get; set; }
-    public int AuthorId { get; set; }
-    public DateTime Date { get; set; }
-    public byte[] Image { get; set; }
-    public string Text { get; set; }*@

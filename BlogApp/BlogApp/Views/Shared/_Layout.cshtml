@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -15,8 +15,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("BlogApp", "Login", "Account", new { area = "" }, new { @class = "navbar-brand" })
+                </button>            
+                @if (User.Identity.IsAuthenticated)
+                {@Html.ActionLink("BlogApp", "Index", "Blog", new { area = "" }, new { @class = "navbar-brand" });
+                }
+                else
+                {@Html.ActionLink("BlogApp", "Login", "Account", new { area = "" }, new { @class = "navbar-brand" })   }             
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -27,14 +31,17 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            @*<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>*@
-        </footer>
+        <hr />       
     </div>
-
+    <footer id="footer_bottom">
+        @*<div class="footer_bottom>*@
+            <p class="copyright">Copyright © 2018 <a href="index.html">NewsFeed</a></p>
+            <p class="developer">Developed By Wpfreeware</p>
+        @*</div>*@
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.min.js")
     @RenderSection("scripts", required: false)
 </body>
 </html>

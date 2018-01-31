@@ -1,0 +1,13 @@
+﻿@model IEnumerable<BlogApp.Data.Entities.Post>
+
+@foreach (var item in Model)
+{
+    <h2>@Html.DisplayFor(modelItem => item.Title)</h2>
+    <h5>@Html.DisplayFor(modelItem =>item.Date)</h5>
+    @Html.Raw("<img style='width:100%; height:100%;' src=\"data:image/jpeg;base64,"
+                                + Convert.ToBase64String(item.Image) + "\" />")
+    <br />
+    @Html.DisplayFor(modelItem => item.Text) 
+    @Html.ActionLink("Open post", "OpenPost", "Blog", new { postId = item.Id }, null)
+    <br />
+}

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<BlogApp.Models.PostModel>
+
+@foreach (var item in Model)
+{
+    <div class="panel panel-default">
+        <div class="panel-body">
+            @Html.ActionLink(item.Title, "OpenPost", "Blog", new { postId = item.Id }, null) <span class="badge">@Html.Action("CommentsCount", "Blog", new { postId = item.Id })</span>
+        </div>
+        <div class="panel-footer">
+            <h5>@Html.DisplayFor(modelItem => item.AuthorName)  @Html.DisplayFor(modelItem => item.Date)</h5>
+        </div>
+    </div>
+    <br />
+    
+}

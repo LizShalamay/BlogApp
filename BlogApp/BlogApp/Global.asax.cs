@@ -1,6 +1,4 @@
-﻿using BlogApp.Core.DataBase;
-using BlogApp.DataBase;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -19,8 +17,6 @@ namespace BlogApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            new BlogDbInitializer().SeedIdentity(new BlogContext());
         }
     }
 }

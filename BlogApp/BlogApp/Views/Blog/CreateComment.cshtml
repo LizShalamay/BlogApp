@@ -1,0 +1,18 @@
+﻿@model BlogApp.Data.Entities.Comment
+
+<div>
+    <br />
+    @using (Html.BeginForm("CreateComment", "Blog", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.PostId)
+        @Html.HiddenFor(model => model.Date)
+        @Html.HiddenFor(model => model.ParentId)
+        @Html.AntiForgeryToken()
+        <div class="panel panel-default">
+            <div class="panel-heading">@Html.LabelFor(model => model.Text)</div>
+            <div class="panel-body">@Html.TextAreaFor(model => model.Text, new { cols = "50", rows = "8", style = "max-width: 100%" })</div>
+        </div>
+        <input class="btn btn-default" type="submit" value="Добавить" />
+    }
+    <br />
+</div>

@@ -16,3 +16,37 @@ textarea {
     max-width: 280px;
 }
 
+.navigation-panel {
+    background-color: #054900;
+
+}
+#footer_bottom {
+    float: left;
+    display: inline;
+    width: 100%;
+    padding: 10px 30px;
+    background-color: #303030;
+    color: #ccc
+}
+.copyright {
+    float: left;
+    width: 50%;
+    padding-top: 5px;
+    text-align: left
+}
+
+    .copyright a {
+        color: #ccc
+    }
+
+.developer {
+    float: right;
+    width: 50%;
+    text-align: right;
+    padding-top: 5px;
+    color: #222
+}
+
+    .developer a {
+        color: #222
+    }

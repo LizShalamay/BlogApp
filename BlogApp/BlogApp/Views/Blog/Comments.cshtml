@@ -1,0 +1,42 @@
+﻿@model BlogApp.Models.CommentListModel
+<div id="container"></div>
+@if (Model.Comments.Count() == 0)
+{
+    <p>No comments yet. Write the first one</p>
+}
+else if (Model.Comments.Where(x => x.ParentId == Model.Seed).Any())
+{
+    <ul>
+        @foreach (var item in Model.Comments)
+        {
+            if (item.ParentId == Model.Seed)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div style="float:left; font-style:oblique">
+                            @Html.DisplayFor(modelItem => item.AuthorName)
+                        </div>
+                        <span style='padding-left:10px;'> </span> @Ajax.ActionLink("answer", "CreateComment", "Blog", new { parentId = item.Id, postId = item.PostId }, new AjaxOptions { UpdateTargetId = "container" }, null)
+                        
+                        <div align="right">
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </div>
+
+                    </div>
+                    <div class="panel-body">
+                        @Html.DisplayFor(modelItem => item.Text)
+                    </div>
+                </div>
+                BlogApp.Models.CommentListModel inner = new BlogApp.Models.CommentListModel
+                {
+                    Seed = item.Id,
+                    Comments = Model.Comments
+                };
+                { @Html.Partial("Comments", inner)}
+            }
+        }
+    </ul>
+    
+}
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>

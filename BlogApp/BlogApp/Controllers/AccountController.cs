@@ -1,16 +1,15 @@
-﻿using BlogApp.Core.Identity;
-using BlogApp.Models;
-using BlogApp.Identity;
+﻿using BlogApp.Models;
+using BlogData;
+using BlogApp.Data.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using BlogApp.Data;
 
 namespace BlogApp.Controllers
 {
@@ -60,6 +59,8 @@ namespace BlogApp.Controllers
 
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Blog");
             ViewBag.returnUrl = returnUrl;
             return View();
         }
@@ -83,7 +84,7 @@ namespace BlogApp.Controllers
                         IsPersistent = true
                     }, claim);
                     if (String.IsNullOrEmpty(returnUrl))
-                        return RedirectToAction("Index", "Account");
+                        return RedirectToAction("Index", "Blog");
                     return RedirectToAction(returnUrl);
                 }
             }
@@ -93,7 +94,7 @@ namespace BlogApp.Controllers
         public ActionResult Logoff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Account");
+            return RedirectToAction("Login", "Account");
         }
 
         public ActionResult Index()

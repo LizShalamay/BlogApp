@@ -15,8 +15,8 @@
     <RootNamespace>BlogApp</RootNamespace>
     <AssemblyName>BlogApp</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
+    <UseIISExpress>false</UseIISExpress>
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -148,6 +148,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -160,9 +162,13 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Blog\CreatePost.cshtml" />
     <Content Include="Views\Blog\Index.cshtml" />
+    <Content Include="Views\Blog\Posts.cshtml" />
+    <Content Include="Views\Blog\Comments.cshtml" />
+    <Content Include="Views\Blog\CreateComment.cshtml" />
+    <Content Include="Views\Blog\News.cshtml" />
+    <Content Include="Views\Blog\OpenPost.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -182,32 +188,20 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
-    <Compile Include="DataBase\BlogContext.cs" />
-    <Compile Include="DataBase\BlogDbInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Identity\AppUserManager.cs" />
-    <Compile Include="Identity\LoginModel.cs" />
-    <Compile Include="Identity\RegisterModel.cs" />
-    <Compile Include="Migrations\201801151535275_initial.cs" />
-    <Compile Include="Migrations\201801151535275_initial.Designer.cs">
-      <DependentUpon>201801151535275_initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Comment.cs" />
-    <Compile Include="Models\Post.cs" />
-    <Compile Include="Models\Role.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\CommentModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\PostModel.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201801151535275_initial.resx">
-      <DependentUpon>201801151535275_initial.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\BlogData\BlogApp.Data.csproj">
+      <Project>{29a98527-40b2-4092-8fca-1ce9dea38805}</Project>
+      <Name>BlogApp.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -224,7 +218,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>58480</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:58480/</IISUrl>
+          <IISUrl>http://localhost/BlogApp</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
