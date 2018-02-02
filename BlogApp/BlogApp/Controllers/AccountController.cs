@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 using BlogApp.Data;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BlogApp.Controllers
 {
@@ -57,25 +58,25 @@ namespace BlogApp.Controllers
             return View(model);
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated & User.IsInRole("user"))
                 return RedirectToAction("Index", "Blog");
-            ViewBag.returnUrl = returnUrl;
+            if(User.IsInRole("admin")) Logoff();
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login(LoginModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindAsync(model.Login, model.Password);
-                if (user == null | user.Login == "admin")
+                var user = await UserManager.FindAsync(model.Login, model.Password);                
+                if (user == null)
                 {
                     ModelState.AddModelError("", "No user found");
                 }
-                else 
+                else
                 {
                     ClaimsIdentity claim = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
                     AuthenticationManager.SignOut();
@@ -83,23 +84,33 @@ namespace BlogApp.Controllers
                     {
                         IsPersistent = true
                     }, claim);
-                    if (String.IsNullOrEmpty(returnUrl))
-                        return RedirectToAction("Index", "Blog");
-                    return RedirectToAction(returnUrl);
+                    return RedirectToAction("Index", "Account",model);
                 }
             }
-            ViewBag.returnUrl = returnUrl;
+            if (User.Identity.IsAuthenticated)
+                Logoff();
             return View(model);
+        }
+        private bool IsAdmin()
+        {
+            return User.IsInRole("admin") ? true : false;
         }
         public ActionResult Logoff()
         {
             AuthenticationManager.SignOut();
             return RedirectToAction("Login", "Account");
         }
-
+        
         public ActionResult Index()
         {
-            return View();
+            bool isAdmin = IsAdmin();
+            if (!isAdmin)
+                return RedirectToAction("Index","Blog");
+            else
+            {
+                ViewBag.Error = "Admins are not allowed to log in";
+                return RedirectToAction("Login");
+            }
         }
     }
 }

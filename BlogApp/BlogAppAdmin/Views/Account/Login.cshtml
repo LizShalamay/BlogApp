@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm())
 {
+    if(User.IsInRole("user")) { <p>Users are not allowed to log in</p>}
     @Html.ValidationSummary()
     <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
     <div class="form-group">

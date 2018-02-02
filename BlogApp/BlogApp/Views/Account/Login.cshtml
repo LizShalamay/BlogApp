@@ -2,12 +2,15 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Login";
+    ViewBag.Error = "Admins are not allowed to log in";
 }
 
 <h2>Вход</h2>
 
 @using (Html.BeginForm())
 {
+    if (User.IsInRole("admin"))
+    {<p>@ViewBag.Error</p>}
     @Html.ValidationSummary()
     <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
     <div class="form-group">

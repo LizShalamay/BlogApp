@@ -31,11 +31,11 @@ namespace BlogAppAdmin.Controllers
             }
         }
 
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated & User.IsInRole("admin"))
                 return RedirectToAction("Index", "Admin");
-            ViewBag.returnUrl = returnUrl;
+            if (User.IsInRole("user")) Logoff();
             return View();
         }
         [HttpPost]
@@ -44,7 +44,7 @@ namespace BlogAppAdmin.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.Login, model.Password);
-                if (user == null | user.Login == "user")
+                if (user == null)
                 {
                     ModelState.AddModelError("", "No admin found");
                 }
@@ -56,13 +56,16 @@ namespace BlogAppAdmin.Controllers
                     {
                         IsPersistent = true
                     }, claim);
-                    if (String.IsNullOrEmpty(returnUrl))
-                        return RedirectToAction("Index", "Admin");
-                    return RedirectToAction(returnUrl);
+                    return RedirectToAction("Index", "Account");
                 }
             }
-            ViewBag.returnUrl = returnUrl;
+            if (User.Identity.IsAuthenticated)
+                Logoff();
             return View(model);
+        }
+        private bool IsAdmin()
+        {
+            return User.IsInRole("admin") ? true : false;
         }
         public ActionResult Logoff()
         {
@@ -71,7 +74,14 @@ namespace BlogAppAdmin.Controllers
         }
         public ActionResult Index()
         {
-            return View();
+            bool isAdmin = IsAdmin();
+            if (isAdmin)
+                return RedirectToAction("Index", "Admin");
+            else
+            {
+                ViewBag.Error = "Users are not allowed to log in";
+                return RedirectToAction("Login");
+            }
         }
     }
 }
