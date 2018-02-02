@@ -1,5 +1,4 @@
-﻿using BlogApp.Models;
-using BlogApp.Data.Entities;
+﻿using BlogApp.Data.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -10,9 +9,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 using BlogApp.Data;
+using BlogAppAdmin.Models;
 
-namespace BlogApp.Controllers
+namespace BlogAppAdmin.Controllers
 {
+
     public class AccountController : Controller
     {
         private AppUserManager UserManager
@@ -29,53 +30,25 @@ namespace BlogApp.Controllers
                 return HttpContext.GetOwinContext().Authentication;
             }
         }
-        public ActionResult Register()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<ActionResult> Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                User user = new User { Login = model.Login, UserName = model.Login };
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-                await UserManager.AddToRoleAsync(user.Id, "user");
-
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-                else
-                {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
-                }
-            }
-            return View(model);
-        }
 
         public ActionResult Login(string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Blog");
+                return RedirectToAction("Index", "Admin");
             ViewBag.returnUrl = returnUrl;
             return View();
         }
-
         [HttpPost]
         public async Task<ActionResult> Login(LoginModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.Login, model.Password);
-                if (user == null | user.Login == "admin")
+                if (user == null | user.Login == "user")
                 {
-                    ModelState.AddModelError("", "No user found");
+                    ModelState.AddModelError("", "No admin found");
                 }
-                else 
+                else
                 {
                     ClaimsIdentity claim = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
                     AuthenticationManager.SignOut();
@@ -84,7 +57,7 @@ namespace BlogApp.Controllers
                         IsPersistent = true
                     }, claim);
                     if (String.IsNullOrEmpty(returnUrl))
-                        return RedirectToAction("Index", "Blog");
+                        return RedirectToAction("Index", "Admin");
                     return RedirectToAction(returnUrl);
                 }
             }
@@ -96,7 +69,6 @@ namespace BlogApp.Controllers
             AuthenticationManager.SignOut();
             return RedirectToAction("Login", "Account");
         }
-
         public ActionResult Index()
         {
             return View();

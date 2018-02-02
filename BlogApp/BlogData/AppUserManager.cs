@@ -17,6 +17,16 @@ namespace BlogApp.Data
         {
             BlogContext db = context.Get<BlogContext>();
             AppUserManager manager = new AppUserManager(new UserStore<User>(db));
+
+            manager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 5,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false
+            };
+
             return manager;
         }
     }

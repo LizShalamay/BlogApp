@@ -17,10 +17,10 @@
                     <span class="icon-bar"></span>
                 </button>            
                 @if (User.Identity.IsAuthenticated)
-                {@Html.ActionLink("BlogApp", "Index", "Blog", new { area = "" }, new { @class = "navbar-brand" });
+                {@Html.ActionLink("BlogApp Admin Portal", "Index", "Admin", new { area = "" }, new { @class = "navbar-brand" });
                 }
                 else
-                {@Html.ActionLink("BlogApp", "Login", "Account", new { area = "" }, new { @class = "navbar-brand" })   }             
+                {@Html.ActionLink("BlogApp Admin Portal", "Login", "Account", new { area = "" }, new { @class = "navbar-brand" })   }             
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -33,8 +33,10 @@
         @RenderBody()
         <hr />       
     </div>
-    <footer id="footer_bottom" >
-            <p class="copyright">Copyright © 2018 <a href="index.html">BlogApp</a></p>
+    <div></div>
+    <footer id="footer_bottom" class=" foo">
+        @*<div class="footer_bottom>*@
+            <p class="copyright">Copyright © 2018 <a href="index.html">BlogApp - Administrator Portal</a></p>
             <p class="developer">Developed By Lizz</p>
         @*</div>*@
     </footer>

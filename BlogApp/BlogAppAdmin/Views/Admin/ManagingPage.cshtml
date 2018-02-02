@@ -1,0 +1,13 @@
+﻿<ul class="nav nav-tabs">
+    <li class="active" data-toggle="tab">
+        @Ajax.ActionLink("Users", "UserTable", new AjaxOptions { UpdateTargetId = "table" })
+    </li>
+    <li data-toggle="tab">
+        @Ajax.ActionLink("Posts", "PostTable", new AjaxOptions { UpdateTargetId = "table" })
+    </li>
+    <li data-toggle="tab">
+        @Ajax.ActionLink("Comments", "CommentTable", new AjaxOptions { UpdateTargetId = "table" })
+    </li>
+</ul>
+<div id="table"></div>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>

@@ -3,6 +3,7 @@
     ViewBag.Title = "OpenPost";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div>
     <h2>@Html.DisplayFor(model => model.Title)</h2>
     <h5>@Html.DisplayFor(model => model.Date)</h5>
@@ -12,10 +13,10 @@
 <br />
 @Html.DisplayFor(model => Model.Text)
 <br />
+@Html.Partial("CreateComment", new BlogApp.Data.Entities.Comment { PostId = Model.Id, Date = DateTime.Now , ParentId = ""})
 <div>
     <div>@Html.Action("Comments", "Blog", Model.Id)</div>
 </div>
-@Html.Partial("CreateComment", new BlogApp.Data.Entities.Comment { PostId = Model.Id, Date = DateTime.Now, ParentId = "" })
 
 
 @Scripts.Render("~/scripts/jquery-1.10.2.min.js")

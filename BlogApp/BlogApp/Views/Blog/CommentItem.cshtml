@@ -1,0 +1,23 @@
+﻿@model BlogApp.Models.CommentModel
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div style="float:left; font-style:oblique">
+            @Html.DisplayFor(modelItem => Model.AuthorName)
+        </div>
+
+        <span style='padding-left:10px;'> </span> 
+        @Ajax.ActionLink("answer", "CreateComment", "Blog", new { parentId = Model.Id, postId = Model.PostId , answer = true}, new AjaxOptions { UpdateTargetId = "container" }, null)
+
+        @if(Model.Answer)
+        {
+            @Html.Partial("CreateComment",new BlogApp.Data.Entities.Comment { PostId = Model.Id, Date = DateTime.Now, ParentId = Model.Id })
+        }
+        <div align="right">
+            @Html.DisplayFor(modelItem => Model.Date)
+        </div>
+    </div>
+    <div class="panel-body">
+        @Html.DisplayFor(modelItem => Model.Text)
+    </div>
+</div>
+@*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>*@

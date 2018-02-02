@@ -15,7 +15,6 @@ namespace BlogApp.Controllers
     public class BlogController : Controller
     {
         BlogContext db = new BlogContext();
-        string currentPostId = "";
         public ActionResult CreatePost()
         {
             return PartialView("CreatePost");
@@ -54,9 +53,34 @@ namespace BlogApp.Controllers
                         select item).ToList();
             return PartialView(post[0]);
         }
-        public ActionResult CreateComment(string parentId, string postId)
+        public ActionResult CreateComment(string parentId, string postId, bool answer)
         {
-            return PartialView(new Comment { ParentId = parentId , PostId = postId, Date = DateTime.Now});
+            if (answer)
+            {
+                var comments = (from item in db.Comments
+                                where item.PostId == postId
+                                orderby item.Date
+                                select item).ToList();
+                CommentListModel commentModels = new CommentListModel { Comments = new List<CommentModel>(), Seed = "" };
+                foreach (var comment in comments)
+                {
+                    string author = (from item in db.Users
+                                     where item.Id == comment.AuthorId
+                                     select item.UserName).ToList().First();
+                    commentModels.Comments.Add(new CommentModel
+                    {
+                        AuthorName = author,
+                        Text = comment.Text,
+                        Date = comment.Date,
+                        Id = comment.Id,
+                        PostId = comment.PostId,
+                        ParentId = comment.ParentId == null ? "" : comment.ParentId,
+                        Answer = comment.Id == parentId ? true : false
+                    });
+                }
+                //return PartialView("Comments", commentModels);
+            }
+                return PartialView(new Comment { ParentId = parentId , PostId = postId, Date = DateTime.Now});
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -67,7 +91,6 @@ namespace BlogApp.Controllers
                 comment.ParentId = comment.ParentId;
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                currentPostId = comment.PostId;
                 return RedirectToAction("OpenPost", new { postId = comment.PostId });
         }
         public ActionResult Comments(string postId)
@@ -77,7 +100,6 @@ namespace BlogApp.Controllers
                            orderby item.Date 
                            select item).ToList();
             CommentListModel commentModels = new CommentListModel { Comments = new List<CommentModel>(), Seed = "" };
-            //List<CommentModel> commentModels = new List<CommentModel>();
             foreach (var comment in comments)
             {
                 string author = (from item in db.Users
@@ -90,7 +112,8 @@ namespace BlogApp.Controllers
                     Date = comment.Date,
                     Id = comment.Id,
                     PostId = comment.PostId,
-                    ParentId = comment.ParentId == null ? "" : comment.ParentId
+                    ParentId = comment.ParentId == null ? "" : comment.ParentId,
+                    Answer = false
                 });
             }
             return PartialView(commentModels);

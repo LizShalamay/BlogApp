@@ -1,0 +1,8 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Index";
+}
+<div>
+    <div align="right">@Html.ActionLink("Log off", "Logoff", "Account", new { area = "" }, new { @class = "btn btn-default navbar-btn", })</div>
+</div>
+@Html.Partial("ManagingPage")

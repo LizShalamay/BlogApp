@@ -1,12 +1,13 @@
-﻿using Microsoft.Owin;
+﻿
+using Microsoft.Owin;
 using Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;
 using BlogApp.Data;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-[assembly: OwinStartup(typeof(BlogApp.App_Start.Startup))]
-namespace BlogApp.App_Start
+[assembly: OwinStartup(typeof(BlogAppAdmin.App_Start.Startup))]
+namespace BlogAppAdmin.App_Start
 {
     public class Startup
     {

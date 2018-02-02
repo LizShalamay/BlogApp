@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BlogAppAdmin.Models.PostModel>
+@{ int counter = 1;}
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author Name</th>
+            <th scope="col">Date</th>           
+            <th scope="col">Comments</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model)
+        {
+            <tr>
+                <th scope="row">{@{counter++;}</th>
+                <td>@Html.DisplayFor(postItem => post.Id)</td>
+                <td>@Html.DisplayFor(postItem => post.Title)</td>
+                <td>@Html.DisplayFor(postItem => post.AuthorName)</td>
+                <td>@Html.DisplayFor(postItem => post.Date)</td>
+                <td>@Html.DisplayFor(postItem => post.CommentsNumber)</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+

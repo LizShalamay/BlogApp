@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BlogApp.Models
+namespace BlogAppAdmin.Models
 {
     public class CommentModel
     {
@@ -13,7 +13,6 @@ namespace BlogApp.Models
         public string Id { get; set; }
         public string PostId { get; set; }
         public string ParentId { get; set; }
-        public bool Answer { get; set; }
     }
 
     public class CommentListModel

@@ -20,6 +20,15 @@ namespace BlogData.Migrations
             var userManager = new AppUserManager(new UserStore<User>(context));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
 
+            userManager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 5,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false
+            };
+
             var roles = new List<IdentityRole>
             {
                 new IdentityRole { Name = "admin" },
@@ -42,7 +51,7 @@ namespace BlogData.Migrations
                 EmailConfirmed = true,
                 Id = Guid.NewGuid().ToString()
             };
-            string adminPassword = "admin123";
+            string adminPassword = "admin";
 
             var adminUser = userManager.FindByName(admin.UserName);
             if (adminUser == null)

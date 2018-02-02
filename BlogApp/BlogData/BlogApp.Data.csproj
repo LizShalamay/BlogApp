@@ -80,9 +80,13 @@
     <Compile Include="Entities\Post.cs" />
     <Compile Include="Entities\Role.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Migrations\201801220939373_initial.cs" />
-    <Compile Include="Migrations\201801220939373_initial.Designer.cs">
-      <DependentUpon>201801220939373_initial.cs</DependentUpon>
+    <Compile Include="Migrations\201801311137026_initial.cs" />
+    <Compile Include="Migrations\201801311137026_initial.Designer.cs">
+      <DependentUpon>201801311137026_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801311145388_newMigration.cs" />
+    <Compile Include="Migrations\201801311145388_newMigration.Designer.cs">
+      <DependentUpon>201801311145388_newMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,10 +95,12 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201801220939373_initial.resx">
-      <DependentUpon>201801220939373_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201801311137026_initial.resx">
+      <DependentUpon>201801311137026_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801311145388_newMigration.resx">
+      <DependentUpon>201801311145388_newMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
