@@ -2,12 +2,7 @@
 using BlogAppAdmin.Models;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using System;
-using System.IO;
 using System.Linq;
-using System.Web;
-using BlogApp.Data.Entities;
 
 namespace BlogAppAdmin.Controllers
 {
@@ -19,27 +14,6 @@ namespace BlogAppAdmin.Controllers
         {
             return PartialView();
         }
-        public IEnumerable<PostModel> News()
-        {
-            var news = (from item in db.Posts
-                        orderby item.Date descending
-                        select item).ToList();
-            List<PostModel> postModels = new List<PostModel>();
-            foreach (var item in news)
-            {
-                var author = from user in db.Users
-                             where user.Id == item.AuthorId
-                             select user.UserName;
-                postModels.Add(new PostModel
-                {
-                    AuthorName = author.First(),
-                    Title = item.Title,
-                    Date = item.Date,
-                    Id = item.Id
-                });
-            }
-            return postModels;
-        }
         public ActionResult OpenPost(string postId)
         {
             var post = (from item in db.Posts
@@ -47,10 +21,112 @@ namespace BlogAppAdmin.Controllers
                         select item).ToList();
             return PartialView(post[0]);
         }
+
         public ActionResult CommentTable()
         {
             var comments = Comments();
             return PartialView("CommentTable", comments);
+        }
+        public ActionResult UserTable()
+        {
+            var users = Users();
+            return PartialView("UserTable", users);
+        }
+        public ActionResult PostTable()
+        {
+            var posts = Posts();
+            return PartialView("PostTable", posts);
+        }
+
+        public ActionResult DeleteUser(string userId)
+        {
+            var user = (from u in db.Users
+                        where u.Id == userId
+                        select u).ToList()[0];
+            DeletePosts(user.Id);
+            DeleteComments(userId: user.Id);
+            db.Users.Remove(user);            
+            db.SaveChanges();
+            return View("Index");
+        }
+        public ActionResult DeletePost(string postId)
+        {
+            var post = (from p in db.Posts
+                        where p.Id == postId
+                        select p).ToList()[0];
+            db.Posts.Remove(post);
+            db.SaveChanges();
+            return View("Index");
+        }
+        public ActionResult DeleteComment(string commentId)
+        {
+            var comment = (from c in db.Comments
+                           where c.Id == commentId
+                           select c).ToList()[0];
+            db.Comments.Remove(comment);
+            db.SaveChanges();
+            return View("Index");
+        }
+        private void DeletePosts(string userId)
+        {
+            var posts = (from post in db.Posts
+                         where post.AuthorId == userId
+                         select post).ToList();
+            foreach (var post in posts)
+            {
+                DeleteComments(postId: post.Id);
+                db.Posts.Remove(post);               
+            }
+            db.SaveChanges();
+        }
+        private void DeleteComments(string userId = "", string postId = "")
+        {
+            if(postId != "")
+            {
+                var comments = (from c in db.Comments
+                                where c.PostId == postId
+                                select c).ToList();
+                foreach(var comment in comments)
+                {
+                    db.Comments.Remove(comment);
+                }
+                db.SaveChanges();
+            }
+            if(userId != "")
+            {
+                var comments = (from c in db.Comments
+                                where c.AuthorId == userId
+                                select c).ToList();
+                foreach (var comment in comments)
+                {
+                    db.Comments.Remove(comment);
+                }
+                db.SaveChanges();
+            }
+        }
+
+        // TODO properties
+        private IEnumerable<PostModel> Posts()
+        {
+            var posts = (from post in db.Posts
+                         select post).ToList();
+            List<PostModel> postModels = new List<PostModel>();
+            foreach (var post in posts)
+            {
+                postModels.Add(new PostModel
+                {
+                    Id = post.Id,
+                    AuthorName = ((from user in db.Users
+                                  where user.Id == post.AuthorId
+                                  select user).ToList())[0].UserName,
+                    Date = post.Date,
+                    Title = post.Title,
+                    CommentsNumber = (from comment in db.Comments
+                                      where comment.PostId == post.Id
+                                      select comment).ToList().Count
+                });
+            }
+            return postModels;
         }
         private IEnumerable<CommentModel> Comments()
         {
@@ -65,7 +141,7 @@ namespace BlogAppAdmin.Controllers
                 commentModels.Add(new CommentModel
                 {
                     AuthorName = author,
-                    Text = comment.Text.Length >= 20 ? comment.Text.Substring(0,17) + "..." : comment.Text,
+                    Text = comment.Text.Length >= 20 ? comment.Text.Substring(0, 17) + "..." : comment.Text,
                     Date = comment.Date,
                     Id = comment.Id,
                     PostId = comment.PostId,
@@ -73,11 +149,6 @@ namespace BlogAppAdmin.Controllers
                 });
             }
             return commentModels;
-        }        
-        public ActionResult UserTable()
-        {
-            var users = Users();
-            return PartialView("UserTable", users);
         }
         private IEnumerable<UserModel> Users()
         {
@@ -101,33 +172,7 @@ namespace BlogAppAdmin.Controllers
             }
             return userModels;
         }
-        public ActionResult PostTable()
-        {
-            var posts = Posts();
-            return PartialView("PostTable", posts);
-        }
-        private IEnumerable<PostModel> Posts()
-        {
-            var posts = (from post in db.Posts
-                         select post).ToList();
-            List<PostModel> postModels = new List<PostModel>();
-            foreach (var post in posts)
-            {
-                postModels.Add(new PostModel
-                {
-                    Id = post.Id,
-                    AuthorName = ((from user in db.Users
-                                  where user.Id == post.AuthorId
-                                  select user).ToList())[0].UserName,
-                    Date = post.Date,
-                    Title = post.Title,
-                    CommentsNumber = (from comment in db.Comments
-                                      where comment.PostId == post.Id
-                                      select comment).ToList().Count
-                });
-            }
-            return postModels;
-        }
+
         public ActionResult Index()
         {
             return View();

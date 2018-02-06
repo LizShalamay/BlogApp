@@ -9,6 +9,7 @@
             <th scope="col">Author Name</th>
             <th scope="col">Date</th>           
             <th scope="col">Comments</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -21,6 +22,7 @@
                 <td>@Html.DisplayFor(postItem => post.AuthorName)</td>
                 <td>@Html.DisplayFor(postItem => post.Date)</td>
                 <td>@Html.DisplayFor(postItem => post.CommentsNumber)</td>
+                <th>@Html.ActionLink("Delete","DeletePost")</th>
             </tr>
 
         }

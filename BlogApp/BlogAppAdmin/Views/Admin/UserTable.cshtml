@@ -6,6 +6,7 @@
             <th scope="col">User Name</th>
             <th scope="col">Posts</th>
             <th scope="col">Comments</th>
+            <th scope="col"></th>
         </tr>
     </thead> 
     <tbody>
@@ -16,6 +17,7 @@
                 <td>@Html.DisplayFor(userItem => user.UserName)</td>
                 <td>@Html.DisplayFor(userItem => user.PostsNumber)</td>
                 <td>@Html.DisplayFor(userItem => user.CommentsNumber)</td>
+                <th>@Html.ActionLink("Delete", "DeleteUser", new { userId = user.Id })</th>
             </tr>
 
         }
