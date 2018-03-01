@@ -22,7 +22,7 @@
                 <td>@Html.DisplayFor(commentItem => comment.Date)</td>
                 <td>@Html.DisplayFor(commentItem => comment.PostId)</td>
                 <td>@Html.DisplayFor(commentItem => comment.Text)</td>
-                <th>@Html.ActionLink("Delete","DeleteComment")</th>
+                <th>@Html.ActionLink("Delete","DeleteComment", new { commentId = comment.Id })</th>
             </tr>
          }
     </tbody>

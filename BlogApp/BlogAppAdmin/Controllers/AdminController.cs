@@ -14,27 +14,20 @@ namespace BlogAppAdmin.Controllers
         {
             return PartialView();
         }
-        public ActionResult OpenPost(string postId)
-        {
-            var post = (from item in db.Posts
-                        where item.Id == postId
-                        select item).ToList();
-            return PartialView(post[0]);
-        }
 
         public ActionResult CommentTable()
         {
-            var comments = Comments();
+            var comments = Comments;
             return PartialView("CommentTable", comments);
         }
         public ActionResult UserTable()
         {
-            var users = Users();
+            var users = Users;
             return PartialView("UserTable", users);
         }
         public ActionResult PostTable()
         {
-            var posts = Posts();
+            var posts = Posts;
             return PartialView("PostTable", posts);
         }
 
@@ -45,7 +38,7 @@ namespace BlogAppAdmin.Controllers
                         select u).ToList()[0];
             DeletePosts(user.Id);
             DeleteComments(userId: user.Id);
-            db.Users.Remove(user);            
+            db.Users.Remove(user);
             db.SaveChanges();
             return View("Index");
         }
@@ -54,6 +47,7 @@ namespace BlogAppAdmin.Controllers
             var post = (from p in db.Posts
                         where p.Id == postId
                         select p).ToList()[0];
+            DeleteComments(postId: post.Id);
             db.Posts.Remove(post);
             db.SaveChanges();
             return View("Index");
@@ -67,6 +61,74 @@ namespace BlogAppAdmin.Controllers
             db.SaveChanges();
             return View("Index");
         }
+
+        public ActionResult OpenUser(string userId = "", string userName = "")
+        {
+            if (userId != "")
+            {
+                var user = (from u in db.Users
+                            where u.Id == userId
+                            select u).ToList()[0];
+                UserModel userModel = new UserModel
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Posts = (from post in db.Posts
+                             where post.AuthorId == user.Id
+                             select post).ToList(),
+                    Comments = (from comment in db.Comments
+                                where comment.AuthorId == user.Id
+                                select comment)
+
+                };
+                return View(userModel);
+            }
+            else if (userName != "")
+            {
+                var user = (from u in db.Users
+                            where u.UserName == userName
+                            select u).ToList()[0];
+                UserModel userModel = new UserModel
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Posts = (from post in db.Posts
+                             where post.AuthorId == user.Id
+                             select post).ToList(),
+                    Comments = (from comment in db.Comments
+                                where comment.AuthorId == user.Id
+                                select comment)
+                };
+                return View(userModel);
+            }
+            return View();
+        }
+        public ActionResult OpenPost(string postId)
+        {
+            var post = (from item in db.Posts
+                        where item.Id == postId
+                        select item).ToList()[0];
+            PostModel postModel = new PostModel
+            {
+                Id = post.Id,
+                AuthorName = ((from user in db.Users
+                               where user.Id == post.AuthorId
+                               select user).ToList())[0].UserName,
+                Date = post.Date,
+                Title = post.Title,
+                Image = post.Image,
+                Text = post.Text,
+                CommentsNumber = (from comment in db.Comments
+                                  where comment.PostId == post.Id
+                                  select comment).ToList().Count,               
+                Comments = (from comment in db.Comments
+                            where comment.PostId == post.Id
+                            select comment)
+            };
+
+            return View(postModel);
+        }
+
         private void DeletePosts(string userId)
         {
             var posts = (from post in db.Posts
@@ -75,24 +137,24 @@ namespace BlogAppAdmin.Controllers
             foreach (var post in posts)
             {
                 DeleteComments(postId: post.Id);
-                db.Posts.Remove(post);               
+                db.Posts.Remove(post);
             }
             db.SaveChanges();
         }
         private void DeleteComments(string userId = "", string postId = "")
         {
-            if(postId != "")
+            if (postId != "")
             {
                 var comments = (from c in db.Comments
                                 where c.PostId == postId
                                 select c).ToList();
-                foreach(var comment in comments)
+                foreach (var comment in comments)
                 {
                     db.Comments.Remove(comment);
                 }
                 db.SaveChanges();
             }
-            if(userId != "")
+            if (userId != "")
             {
                 var comments = (from c in db.Comments
                                 where c.AuthorId == userId
@@ -105,72 +167,80 @@ namespace BlogAppAdmin.Controllers
             }
         }
 
-        // TODO properties
-        private IEnumerable<PostModel> Posts()
+        private IEnumerable<PostModel> Posts
         {
-            var posts = (from post in db.Posts
-                         select post).ToList();
-            List<PostModel> postModels = new List<PostModel>();
-            foreach (var post in posts)
+            get
             {
-                postModels.Add(new PostModel
+                var posts = (from post in db.Posts
+                             select post).ToList();
+                List<PostModel> postModels = new List<PostModel>();
+                foreach (var post in posts)
                 {
-                    Id = post.Id,
-                    AuthorName = ((from user in db.Users
-                                  where user.Id == post.AuthorId
-                                  select user).ToList())[0].UserName,
-                    Date = post.Date,
-                    Title = post.Title,
-                    CommentsNumber = (from comment in db.Comments
-                                      where comment.PostId == post.Id
-                                      select comment).ToList().Count
-                });
+                    postModels.Add(new PostModel
+                    {
+                        Id = post.Id,
+                        AuthorName = ((from user in db.Users
+                                       where user.Id == post.AuthorId
+                                       select user).ToList())[0].UserName,
+                        Date = post.Date,
+                        Title = post.Title,
+                        CommentsNumber = (from comment in db.Comments
+                                          where comment.PostId == post.Id
+                                          select comment).Count()
+                    });
+                }
+                return postModels;
             }
-            return postModels;
         }
-        private IEnumerable<CommentModel> Comments()
+        private IEnumerable<CommentModel> Comments
         {
-            var comments = (from item in db.Comments
-                            select item).ToList();
-            List<CommentModel> commentModels = new List<CommentModel>();
-            foreach (var comment in comments)
+            get
             {
-                string author = (from item in db.Users
-                                 where item.Id == comment.AuthorId
-                                 select item.UserName).ToList().First();
-                commentModels.Add(new CommentModel
+                var comments = (from item in db.Comments
+                                select item).ToList();
+                List<CommentModel> commentModels = new List<CommentModel>();
+                foreach (var comment in comments)
                 {
-                    AuthorName = author,
-                    Text = comment.Text.Length >= 20 ? comment.Text.Substring(0, 17) + "..." : comment.Text,
-                    Date = comment.Date,
-                    Id = comment.Id,
-                    PostId = comment.PostId,
-                    ParentId = comment.ParentId == null ? "" : comment.ParentId
-                });
+                    string author = (from item in db.Users
+                                     where item.Id == comment.AuthorId
+                                     select item.UserName).ToList().First();
+                    commentModels.Add(new CommentModel
+                    {
+                        AuthorName = author,
+                        Text = comment.Text.Length >= 20 ? comment.Text.Substring(0, 17) + "..." : comment.Text,
+                        Date = comment.Date,
+                        Id = comment.Id,
+                        PostId = comment.PostId,
+                        ParentId = comment.ParentId == null ? "" : comment.ParentId
+                    });
+                }
+                return commentModels;
             }
-            return commentModels;
         }
-        private IEnumerable<UserModel> Users()
+        private IEnumerable<UserModel> Users
         {
-            var users = (from user in db.Users
-                         where user.UserName != "admin"
-                         select user).ToList();
-            List<UserModel> userModels = new List<UserModel>();
-            foreach (var user in users)
+            get
             {
-                userModels.Add(new UserModel
+                var users = (from user in db.Users
+                             where user.UserName != "admin"
+                             select user).ToList();
+                List<UserModel> userModels = new List<UserModel>();
+                foreach (var user in users)
                 {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    PostsNumber = (from post in db.Posts
-                                   where post.AuthorId == user.Id
-                                   select post).ToList().Count,
-                    CommentsNumber = (from comment in db.Comments
-                                      where comment.AuthorId == user.Id
-                                      select comment).ToList().Count
-                });
+                    userModels.Add(new UserModel
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        PostsNumber = (from post in db.Posts
+                                       where post.AuthorId == user.Id
+                                       select post).ToList().Count,
+                        CommentsNumber = (from comment in db.Comments
+                                          where comment.AuthorId == user.Id
+                                          select comment).ToList().Count
+                    });
+                }
+                return userModels;
             }
-            return userModels;
         }
 
         public ActionResult Index()

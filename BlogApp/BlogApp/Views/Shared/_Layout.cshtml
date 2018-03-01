@@ -4,40 +4,40 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" type="text/css" href="~/Content/Site.css" />
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>            
-                @if (User.Identity.IsAuthenticated)
-                {@Html.ActionLink("BlogApp", "Index", "Blog", new { area = "" }, new { @class = "navbar-brand" });
-                }
-                else
-                {@Html.ActionLink("BlogApp", "Login", "Account", new { area = "" }, new { @class = "navbar-brand" })   }             
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                </ul>
-            </div>
-        </div>
+    <div id="header">
+        <h2>
+            @if (User.Identity.IsAuthenticated)
+            {
+                @Html.ActionLink("BlogApp", "Index", "Blog", new { area = "" }, null);
+            }
+            else
+            {
+                @Html.ActionLink("BlogApp", "Login", "Account", new { area = "" }, null)
+            }
+        </h2>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <ul id="navigation">
+                <li>Profile</li>
+                <li>@Html.ActionLink("Blog", "Index", "Blog", new { area = "" }, null)</li>
+                <li>@Html.ActionLink("Log off", "Logoff", "Account", new { area = "" }, null)</li>
+            </ul>
+        }
     </div>
 
-    <div class="container body-content">
+
+    <div id="main-content">
         @RenderBody()
-        <hr />       
     </div>
-    <footer id="footer_bottom" >
-            <p class="copyright">Copyright © 2018 <a href="index.html">BlogApp</a></p>
-            <p class="developer">Developed By Lizz</p>
-        @*</div>*@
-    </footer>
+    <div id="footer">
+        <p id="copyright">Copyright © 2018</p>
+        <p id="developer">BlogAppDeveloped By Lizz</p>
+    </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.min.js")

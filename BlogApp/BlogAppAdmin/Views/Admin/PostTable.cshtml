@@ -17,14 +17,16 @@
         {
             <tr>
                 <th scope="row">{@{counter++;}</th>
-                <td>@Html.DisplayFor(postItem => post.Id)</td>
-                <td>@Html.DisplayFor(postItem => post.Title)</td>
-                <td>@Html.DisplayFor(postItem => post.AuthorName)</td>
+                <td>@Html.ActionLink(post.Id,"OpenPost", new { postId = post.Id })</td>
+                @*<td>@Html.DisplayFor(postItem => post.Id)</td>*@
+                <td>@Html.ActionLink(post.Title, "OpenPost", new { postId = post.Id })</td>
+                @*<td>@Html.DisplayFor(postItem => post.Title)</td>*@
+                <td>@Html.ActionLink(post.AuthorName, "OpenUser", new { userName = post.AuthorName })</td>
+                @*<td>@Html.DisplayFor(postItem => post.AuthorName)</td>*@
                 <td>@Html.DisplayFor(postItem => post.Date)</td>
                 <td>@Html.DisplayFor(postItem => post.CommentsNumber)</td>
-                <th>@Html.ActionLink("Delete","DeletePost")</th>
+                <th>@Html.ActionLink("Delete","DeletePost", new { postId = post.Id })</th>
             </tr>
-
         }
     </tbody>
 </table>

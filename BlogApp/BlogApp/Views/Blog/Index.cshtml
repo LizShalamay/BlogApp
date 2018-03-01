@@ -1,22 +1,29 @@
-﻿@model IEnumerable<BlogApp.Data.Entities.Post>
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="jquery-ui.css" rel="stylesheet" type="text/css">
+</head>
+<body style="min-width:1250px">
+    @model IEnumerable<BlogApp.Data.Entities.Post>
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Index";
-}
-<div>
-    <div align="left" style="float:left">@Html.ActionLink("Add new post", "CreatePost", "Blog", new { area = "" }, new { @class = "btn btn-default navbar-btn" })</div>
-    <div align="right">@Html.ActionLink("Log off", "Logoff", "Account", new { area = "" }, new { @class = "btn btn-default navbar-btn", })</div>
-</div>
-
-
-<div class="col-lg-8 col-md-8 col-sm-8">
-    @Html.Partial("Posts")
-</div>
-<div class="col-lg-4 col-md-4 col-sm-4">
-    @using (Html.BeginForm("News", "Blog", FormMethod.Get))
-    {
-        @Html.Action("ShowNews","Blog")
+    @{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        ViewBag.Title = "Index";
     }
-</div>
-
+    @*<div style="padding-left:15px; padding-right:15px;">
+            <div align="left" style="float:left">@Html.ActionLink("Add new post", "CreatePost", "Blog", new { area = "" }, new { @class = "btn btn-default navbar-btn" })</div>
+            <div align="right">@Html.ActionLink("Log off", "Logoff", "Account", new { area = "" }, new { @class = "btn btn-default navbar-btn", })</div>
+        </div>*@
+    <div @*class="container" style="min-width:1200px !important;"*@>
+        <div class="post-container">
+            @Html.Partial("Posts")
+        </div>
+        <div class="news">
+            @using (Html.BeginForm("News", "Blog", FormMethod.Get))
+            {
+                @Html.Action("ShowNews", "Blog")
+            }
+        </div>
+    </div>
+</body>
+</html>

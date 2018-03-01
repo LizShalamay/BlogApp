@@ -1,0 +1,47 @@
+﻿@model BlogAppAdmin.Models.UserModel
+
+<div>
+    <div align="left" style="float:left">@Html.ActionLink("Delete user", "DeleteUser", "Admin", new { userId = Model.Id }, new { @class = "btn btn-default navbar-btn" })</div>
+    <div align="right">@Html.ActionLink("Log off", "Logoff", "Account", new { area = "" }, new { @class = "btn btn-default navbar-btn", })</div>
+</div>
+
+
+<div class="col-lg-8 col-md-8 col-sm-8">
+    <h2>Posts</h2>
+
+    @foreach (var item in Model.Posts)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                @Html.DisplayFor(modelItem => item.Title)<br />
+                @Html.DisplayFor(modelItem => item.Date)
+            </div>
+            <div class="panel-body">
+                <div align="center">
+                    @Html.Raw("<img style='width:50%; height:50%;' src=\"data:image/jpeg;base64,"
+                                + Convert.ToBase64String(item.Image) + "\" />")
+                </div>
+                <br />
+                @Html.DisplayFor(modelItem => item.Text)
+                <br />
+            </div>
+        </div>
+    }
+</div>
+<div class="col-lg-4 col-md-4 col-sm-4">
+    <h2>Comments</h2>
+    @foreach (var item in Model.Comments)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div>
+                    @Html.DisplayFor(modelItem => Model.Posts.Where(post => post.Id == item.PostId).Select(post => post).ToList()[0].Title)
+                    @Html.DisplayFor(modelItem => item.Date)
+                </div>
+            </div>
+            <div class="panel-body">
+                @Html.DisplayFor(modelItem => item.Text)
+            </div>
+        </div>
+    }
+</div>

@@ -3,14 +3,11 @@ using BlogApp.Data.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.ComponentModel.DataAnnotations;
 using BlogApp.Data;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BlogApp.Controllers
 {
@@ -23,6 +20,7 @@ namespace BlogApp.Controllers
                 return HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
             }
         }
+
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -30,10 +28,12 @@ namespace BlogApp.Controllers
                 return HttpContext.GetOwinContext().Authentication;
             }
         }
+
         public ActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<ActionResult> Register(RegisterModel model)
         {
@@ -72,45 +72,37 @@ namespace BlogApp.Controllers
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.Login, model.Password);                
-                if (user == null)
+                if (user != null)
                 {
-                    ModelState.AddModelError("", "No user found");
+                    ClaimsIdentity claim = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+
+                    var authResponseGrant = new AuthenticationResponseGrant(claim, new AuthenticationProperties());
+                    var userPrincipal = new ClaimsPrincipal(authResponseGrant.Identity);
+                    if (userPrincipal.IsInRole("user"))
+                    {
+                        AuthenticationManager.SignOut();
+                        AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = true }, claim);
+                        return RedirectToAction("Index", "Blog");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "You have no permissions to sign in");
+                    }
                 }
                 else
                 {
-                    ClaimsIdentity claim = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                    AuthenticationManager.SignOut();
-                    AuthenticationManager.SignIn(new AuthenticationProperties
-                    {
-                        IsPersistent = true
-                    }, claim);
-                    return RedirectToAction("Index", "Account",model);
+                    ModelState.AddModelError("", "No user found");
                 }
             }
             if (User.Identity.IsAuthenticated)
-                Logoff();
+                AuthenticationManager.SignOut();
             return View(model);
         }
-        private bool IsAdmin()
-        {
-            return User.IsInRole("admin") ? true : false;
-        }
+
         public ActionResult Logoff()
         {
             AuthenticationManager.SignOut();
             return RedirectToAction("Login", "Account");
-        }
-        
-        public ActionResult Index()
-        {
-            bool isAdmin = IsAdmin();
-            if (!isAdmin)
-                return RedirectToAction("Index","Blog");
-            else
-            {
-                ViewBag.Error = "Admins are not allowed to log in";
-                return RedirectToAction("Login");
-            }
         }
     }
 }

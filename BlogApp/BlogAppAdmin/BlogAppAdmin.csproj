@@ -228,10 +228,10 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\OpenPost.cshtml" />
-    <Content Include="Views\Admin\Comments.cshtml" />
     <Content Include="Views\Admin\ManagingPage.cshtml" />
     <Content Include="Views\Admin\UserTable.cshtml" />
     <Content Include="Views\Admin\PostTable.cshtml" />
+    <Content Include="Views\Admin\OpenUser.cshtml" />
     <Content Include="Views\Admin\CommentTable.cshtml" />
   </ItemGroup>
   <ItemGroup>

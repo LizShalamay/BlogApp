@@ -11,5 +11,8 @@ namespace BlogApp.Data.Entities
     {
         public string Login { get; set; }
         public string Password { get; set; }
+        public DateTime BDay { get; set; }
+        public bool Gender { get; set; }
+        public byte[] Avatar { get; set; }
     }
 }

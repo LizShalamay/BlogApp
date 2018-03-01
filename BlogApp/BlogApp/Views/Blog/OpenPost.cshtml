@@ -1,22 +1,62 @@
-﻿@model BlogApp.Data.Entities.Post
-@{
-    ViewBag.Title = "OpenPost";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-<div>
-    <h2>@Html.DisplayFor(model => model.Title)</h2>
-    <h5>@Html.DisplayFor(model => model.Date)</h5>
-</div>
-@Html.Raw("<img style='width:100%; height:100%;' src=\"data:image/jpeg;base64,"
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link href="jquery-ui.css" rel="stylesheet" type="text/css">
+</head>
+<body style="min-width:1250px">
+    @model BlogApp.Data.Entities.Post
+    @{
+        ViewBag.Title = "OpenPost";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    <div @*class="container" style="min-width:1200px !important;"*@>
+        <div class="main-post">
+            <div class="heading">
+                @Html.DisplayFor(model => model.Title)
+                
+                <p class="date">
+                    <span style="font-weight:500">@ViewBag.AuthorName</span>
+                    @Html.DisplayFor(model => model.Date)
+                </p>
+            </div>
+
+            <div class="main-image">
+                @Html.Raw("<img src=\"data:image/jpeg;base64,"
                                 + Convert.ToBase64String(Model.Image) + "\" />")
-<br />
-@Html.DisplayFor(model => Model.Text)
-<br />
-<div>
-    <div>@Html.Action("Comments", "Blog", Model.Id)</div>
-</div>
-@Html.Partial("CreateComment", new BlogApp.Data.Entities.Comment { PostId = Model.Id, Date = DateTime.Now, ParentId = "" })
+            </div>
 
+            <div class="text">
+                @Html.DisplayFor(model => Model.Text)
+            </div>
+            <hr />
+            <div>
+                <div>@Html.Action("Comments", "Blog", Model.Id)</div>
+            </div>
+            <div @*class="comment-creator"*@>
+                <div>
+                    @Html.LabelFor(model => model.Text)
+                </div>
+                @Html.Partial("CreateComment", new BlogApp.Data.Entities.Comment { PostId = Model.Id, Date = DateTime.Now, ParentId = "" })
+            </div>
+        </div>
 
-@Scripts.Render("~/scripts/jquery-1.10.2.min.js")
-@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.min.js")
+        <div class="news">
+            @using (Html.BeginForm("News", "Blog", FormMethod.Get))
+            {
+                @Html.Action("ShowNews", "Blog")
+            }
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("a.answer").click(function () {
+                var divId = this.getAttribute("data-parameter");
+                if ($('#' + divId).css('display') == 'none')
+                    $('.answer-form').hide();
+                $('#' + divId).toggle();
+            });
+        });
+    </script>
+    @Scripts.Render("~/scripts/jquery-1.10.2.min.js")
+</body>
+</html>

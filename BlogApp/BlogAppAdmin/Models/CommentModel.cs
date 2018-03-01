@@ -17,6 +17,11 @@ namespace BlogAppAdmin.Models
 
     public class CommentListModel
     {
+        public CommentListModel()
+        {
+            Comments = new List<CommentModel>();
+        }
+
         public string Seed { get; set; }
         public List<CommentModel> Comments { get; set; }
     }

@@ -142,6 +142,7 @@
     <None Include="packages.config" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="HtmlPage1.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -163,13 +164,14 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Blog\CreatePost.cshtml" />
-    <Content Include="Views\Blog\Index.cshtml" />
     <Content Include="Views\Blog\Posts.cshtml" />
     <Content Include="Views\Blog\Comments.cshtml" />
     <Content Include="Views\Blog\CreateComment.cshtml" />
     <Content Include="Views\Blog\News.cshtml" />
-    <Content Include="Views\Blog\OpenPost.cshtml" />
     <Content Include="Views\Blog\CommentItem.cshtml" />
+    <Content Include="Views\Shared\_MyLayout.cshtml" />
+    <Content Include="Views\Blog\OpenPost.cshtml" />
+    <Content Include="Views\Blog\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

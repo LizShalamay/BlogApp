@@ -4,25 +4,22 @@
     ViewBag.Title = "Login";
     ViewBag.Error = "Admins are not allowed to log in";
 }
+<div id="login-form">
+    <div class="form-control">
+        @using (Html.BeginForm())
+        {
+            if (User.IsInRole("admin"))
+            {<p>@ViewBag.Error</p>}
+            @Html.ValidationSummary()
+            <div class="form-group">
+                @Html.TextBoxFor(x => x.Login, new { @class = "form-control", @placeholder = "Login" })
+                @Html.PasswordFor(x => x.Password, new { @class = "form-control", @placeholder = "Password" })
 
-<h2>Вход</h2>
-
-@using (Html.BeginForm())
-{
-    if (User.IsInRole("admin"))
-    {<p>@ViewBag.Error</p>}
-    @Html.ValidationSummary()
-    <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
-    <div class="form-group">
-        <label>Login</label>
-        @Html.TextBoxFor(x => x.Login, new { @class = "form-control" })
+                <div class="button-group">
+                    <button type="submit" class="button-submit">Sign in</button>
+                    @Html.ActionLink("Register", "Register", "Account")
+                </div>
+            </div>
+        }
     </div>
-
-    <div class="form-group">
-        <label>Password</label>
-        @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
-    </div>
-
-    <button type="submit" class="btn btn-primary">Войти</button>
-    @Html.ActionLink("Register", "Register", "Account")
-}
+</div>
